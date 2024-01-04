@@ -89,6 +89,7 @@
                                     <div class="mb-3">
                                         <label for="sku">SKU (Stock Keeping Unit)</label>
                                         <input type="text" name="sku" id="sku" class="form-control" placeholder="sku">	
+                                        <p class="error"></p>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -154,7 +155,7 @@
                         <div class="card-body">	
                             <h2 class="h4 mb-3">Product brand</h2>
                             <div class="mb-3">
-                                <select name="status" id="status" class="form-control">
+                                <select name="brand" id="brand" class="form-control">
                                     <option value="">Select a brand</option>
                                     @if ($brands->isNotEmpty())
                                         @foreach ($brands as $brand)
@@ -213,28 +214,42 @@
     $("#productForm").submit(function(event){
         event.preventDefault();
         var formArray = $(this).serializeArray();
+        $(button[type='submit']).prop('disabled',true);
+
         $.ajax({
             url: '{{ route("products.store") }}',
             type: 'post',
             data: formArray,
             dataType: 'json',
             success: function(response){
-                if(response['status'] == true){
+                $(button[type='submit']).prop('disabled',false);
+
+                if(response['status'] == true) {
 
                 } else {
                     var errors = response['errors'];
 
-                    if (errors['title']){
-                        $("#title").addClass('is_invalid')
+                    // if (errors['title']){
+                    //     $("#title").addClass('is-invalid')
+                    //     .siblings('p')
+                    //     .addClass('invalid-feedback')
+                    //     .html(errors['title']);
+                    // } else {
+                    //     $("#title").removeClass('is-invalid')
+                    //     .siblings('p')
+                    //     .removeClass('invalid-feedback')
+                    //     .html("");
+                    // }
+
+                    $(".errors").removeClass('invalid-feedback').html('');
+                    $("input[type='text'], select ,input[type='number']").removeClass('is-invalid');
+                    
+                    $.each(errors, function(key,value){
+                        $(`#${key}`).addClass('is-invalid')
                         .siblings('p')
                         .addClass('invalid-feedback')
-                        .html(errors['title']);
-                    } else {
-                        $("#title").removeClass('is_invalid')
-                        .siblings('p')
-                        .removeClass('invalid-feedback')
-                        .html("");
-                    }
+                        .html(value);
+                    });
                 }
             },
             error: function(){
@@ -254,7 +269,7 @@
                 // console.log(response);
                 $("#sub_category").find("option").not(":first").remove();
                 $.each(response["subcategories"],function(key,item){
-                    $("#sub_category").append(`<option ='${item.id}'>${item.name}</option>`)
+                    $("#sub_category").append(`<option value='${item.id}'>${item.name}</option>`)
                 }); 
             },
             error: function(){
