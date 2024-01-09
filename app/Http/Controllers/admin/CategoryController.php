@@ -61,7 +61,7 @@ class CategoryController extends Controller
                 $dPath = public_path().'/uploads/category/thumb/'.$newImageName;
                 $manager = new ImageManager(new Driver());
                 $image = $manager->read($sPath);
-                $image = $image->resizeDown(450, 600);
+                $image = $image->resize(450, 600);
                 // $image->fit(450, 600, function ($constraint) {
                 //     $constraint->upsize();
                 // });

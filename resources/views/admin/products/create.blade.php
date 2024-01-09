@@ -214,7 +214,7 @@
     $("#productForm").submit(function(event){
         event.preventDefault();
         var formArray = $(this).serializeArray();
-        $(button[type='submit']).prop('disabled',true);
+        $("button[type='submit']").prop('disabled',true);
 
         $.ajax({
             url: '{{ route("products.store") }}',
@@ -222,7 +222,7 @@
             data: formArray,
             dataType: 'json',
             success: function(response){
-                $(button[type='submit']).prop('disabled',false);
+                $("button[type='submit']").prop('disabled',false);
 
                 if(response['status'] == true) {
 
@@ -276,6 +276,28 @@
                 console.log("Somthing Went Wrong");
             }
         });
+    });
+
+    Dropzone.autoDiscover = false;    
+    const dropzone = $("#image").dropzone({ 
+        init: function() {
+            this.on('addedfile', function(file) {
+                if (this.files.length > 1) {
+                    this.removeFile(this.files[0]);
+                }
+            });
+        },
+        url:  "{{ route('temp-images.create') }}",
+        maxFiles: 10,
+        paramName: 'image',
+        addRemoveLinks: true,
+        acceptedFiles: "image/jpeg,image/png,image/gif",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, success: function(file, response){
+            $("#image_id").val(response.image_id);
+            //console.log(response)
+        }
     });
 
     </script>
