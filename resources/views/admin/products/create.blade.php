@@ -58,6 +58,9 @@
                             </div>
                         </div>	                                                                      
                     </div>
+                    <div class="row" id="product-gallery">
+
+                    </div>
                     <div class="card mb-3">
                         <div class="card-body">
                             <h2 class="h4 mb-3">Pricing</h2>								
@@ -225,7 +228,10 @@
                 $("button[type='submit']").prop('disabled',false);
 
                 if(response['status'] == true) {
-
+                    $(".errors").removeClass('invalid-feedback').html('');
+                    $("input[type='text'], select ,input[type='number']").removeClass('is-invalid');
+                    
+                    window.location.href="{{ route('products.index') }}";
                 } else {
                     var errors = response['errors'];
 
@@ -280,13 +286,6 @@
 
     Dropzone.autoDiscover = false;    
     const dropzone = $("#image").dropzone({ 
-        init: function() {
-            this.on('addedfile', function(file) {
-                if (this.files.length > 1) {
-                    this.removeFile(this.files[0]);
-                }
-            });
-        },
         url:  "{{ route('temp-images.create') }}",
         maxFiles: 10,
         paramName: 'image',
@@ -295,10 +294,28 @@
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }, success: function(file, response){
-            $("#image_id").val(response.image_id);
-            //console.log(response)
+            //$("#image_id").val(response.image_id);
+            // console.log(response)
+
+            var html = `<div class="col-md-3" id="image-row-${response.image_id}"><div class="card">
+                <input type="hidden" name="image_array[]" value="${response.image_id}">
+                <img src="${response.ImagePath}" class="card-img-top" alt="">
+                <div class="card-body">
+                    <a href="javascript:void(0)" onclick="deleteImage(${response.image_id })" class="btn btn-danger">Delete</a>
+                </div>
+            </div></div>`;
+
+            $("#product-gallery").append(html);
+        },
+        complete: function(file){
+            this.removeFile(file);
         }
+
     });
+
+    function deleteImage(id){
+        $("#image-row-"+id).remove();
+    }
 
     </script>
 @endsection
