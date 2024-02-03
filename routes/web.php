@@ -10,6 +10,7 @@ use App\Http\Controllers\admin\ProductSubCategorycontroller;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImagesController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\ShopController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/',[FrontController::class,'index'])->name('front.home');
+Route::get('/shop',[ShopController::class,'index'])->name('front.shop');
 
 Route::get('/admin/login',[AdminLoginController::class,'index'])->name('admin.login');
 
