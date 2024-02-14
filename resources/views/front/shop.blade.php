@@ -174,9 +174,9 @@
         type: "double",
         min: 0,
         max: 1000,
-        from: 0,
+        from: {{ ($priceMin) }},
         step: 10,
-        to: 500,
+        to: {{ ($priceMax) }},
         skin: "round",
         max_postfix: "+",
         prefix: "$",
@@ -185,12 +185,16 @@
         }
     });
 
+    // Saving it's instance to var
+    var slider = $(".js-range-slider").data("ionRangeSlider");
+
     $(".brand-label").change(function(){
         apply_filters();
     });
 
     function apply_filters(){
         var brands = [];
+
         $('.brand-label').each(function(){
             if($(this).is(":checked") == true){
                 brands.push($(this).val());
@@ -200,7 +204,13 @@
 
         var url = '{{ url()->current() }}?';
 
-        window.location.href = url+'&brands='+brands.toString() ;
+        url += '&price_min='+slider.result.from+'&price_max='+slider.result.to;
+
+        if (brands.length > 0){
+            url += '&brands='+brands.toString()
+        }
+
+        window.location.href = url;
     }
 
    
