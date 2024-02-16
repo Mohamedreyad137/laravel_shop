@@ -90,14 +90,11 @@
                     <div class="col-12 pb-1">
                         <div class="d-flex align-items-center justify-content-end mb-4">
                             <div class="ml-2">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown">Sorting</button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">Latest</a>
-                                        <a class="dropdown-item" href="#">Price High</a>
-                                        <a class="dropdown-item" href="#">Price Low</a>
-                                    </div>
-                                </div>                                    
+                                <select name="sort" id="sort" class="form-control">
+                                    <option value="latest" {{ ($sort == 'latest') ? 'selected' : '' }}>Latest</option>
+                                    <option value="price_desc" {{ ($sort == 'price_desc') ? 'selected' : '' }}>Price High</option>
+                                    <option value="price_asc" {{ ($sort == 'price_asc') ? 'selected' : '' }}>Price Low</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -145,7 +142,8 @@
                     @endif
 
                     <div class="col-md-12 pt-5">
-                        <nav aria-label="Page navigation example">
+                        {{ $products->withQueryString()->links() }}
+                        {{-- <nav aria-label="Page navigation example">
                             <ul class="pagination justify-content-end">
                                 <li class="page-item disabled">
                                 <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
@@ -157,7 +155,7 @@
                                 <a class="page-link" href="#">Next</a>
                                 </li>
                             </ul>
-                        </nav>
+                        </nav> --}}
                     </div>
                 </div>
             </div>
@@ -192,6 +190,10 @@
         apply_filters();
     });
 
+    $("#sort").change(function(){
+        apply_filters();
+    });
+
     function apply_filters(){
         var brands = [];
 
@@ -200,15 +202,21 @@
                 brands.push($(this).val());
             }
         });
-        console.log(brands.toString());
+
 
         var url = '{{ url()->current() }}?';
 
-        url += '&price_min='+slider.result.from+'&price_max='+slider.result.to;
-
+        // Brand filter
         if (brands.length > 0){
             url += '&brands='+brands.toString()
         }
+
+        // Price Range filter
+        url += '&price_min='+slider.result.from+'&price_max='+slider.result.to;
+
+        // Sorting filter
+
+        url += '&sort='+$("#sort").val()
 
         window.location.href = url;
     }
