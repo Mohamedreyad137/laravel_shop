@@ -9,6 +9,7 @@ use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\ProductSubCategorycontroller;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImagesController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Http\Request;
@@ -32,6 +33,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/',[FrontController::class,'index'])->name('front.home');
 Route::get('/shop/{categorySlug?}/{subCategorySlug?}',[ShopController::class,'index'])->name('front.shop');
 Route::get('/product/{slug}',[ShopController::class,'product'])->name('front.product');
+Route::get('/cart',[CartController::class,'cart'])->name('front.cart');
+Route::post('/add-to-cart',[CartController::class,'addToCart'])->name('front.addToCart');
+Route::post('/update-cart',[CartController::class,'updateCart'])->name('front.updateCart');
+Route::post('/delete-item',[CartController::class,'deleteItem'])->name('front.deleteItem.cart');
 
 
 Route::get('/admin/login',[AdminLoginController::class,'index'])->name('admin.login');
@@ -83,7 +88,8 @@ Route::group(['prefix'=>'admin'],function(){
         Route::get('/products/{product}/edit',[ProductController::class,'edit'])->name('products.edit');
         Route::put('/products/{product}',[ProductController::class,'update'])->name('products.update');
         Route::delete('/products/{product}',[ProductController::class,'destroy'])->name('products.destroy');
-        
+        Route::get('/get-products',[ProductController::class,'getProducts'])->name('products.getProducts');
+
         
         Route::get('/product-subcategories',[ProductSubCategorycontroller::class,'index'])->name('product-subcategories.index');
         
