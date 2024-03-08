@@ -6,7 +6,7 @@
         <div class="light-font">
             <ol class="breadcrumb primary-color mb-0">
                 <li class="breadcrumb-item"><a class="white-text" href="{{ route('front.home')}}">Home</a></li>
-                <li class="breadcrumb-item"><a class="white-text" href="{{ route('front.shopF')}}">Shop</a></li>
+                <li class="breadcrumb-item"><a class="white-text" href="{{ route('front.shop')}}">Shop</a></li>
                 <li class="breadcrumb-item">Cart</li>
             </ol>
         </div>
@@ -110,7 +110,7 @@
                             <div>${{ Cart::subtotal() }}</div>
                         </div>
                         <div class="pt-5">
-                            <a href="login.php" class="btn-dark btn btn-block w-100">Proceed to Checkout</a>
+                            <a href="{{ route('front.checkout') }}" class="btn-dark btn btn-block w-100">Proceed to Checkout</a>
                         </div>
                     </div>
                 </div>     
