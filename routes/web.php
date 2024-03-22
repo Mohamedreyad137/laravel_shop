@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\ProductSubCategorycontroller;
+use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImagesController;
 use App\Http\Controllers\AuthController;
@@ -40,13 +41,13 @@ Route::post('/update-cart',[CartController::class,'updateCart'])->name('front.up
 Route::post('/delete-item',[CartController::class,'deleteItem'])->name('front.deleteItem.cart');
 Route::get('/checkout',[CartController::class,'checkout'])->name('front.checkout');
 Route::post('/process-checkout',[CartController::class,'processCheckout'])->name('front.processCheckout');
+Route::get('/thanks/{orderId}',[CartController::class,'thankyou'])->name('front.thankyou');
 
 
 Route::group(['prefix'=>'account'],function(){
     Route::group(['middleware'=>'guest'],function(){
         Route::get('/login',[AuthController::class,'login'])->name('account.login');
-        Route::post('/login',[AuthController::class,'authenticate'])->name('account.authenticate');
-        
+        Route::post('/login',[AuthController::class,'authenticate'])->name('account.authenticate'); 
         Route::get('/register',[AuthController::class,'register'])->name('account.register');
         Route::post('/process-register',[AuthController::class,'processRegister'])->name('account.processRegister');
            
@@ -108,13 +109,18 @@ Route::group(['prefix'=>'admin'],function(){
         Route::put('/products/{product}',[ProductController::class,'update'])->name('products.update');
         Route::delete('/products/{product}',[ProductController::class,'destroy'])->name('products.destroy');
         Route::get('/get-products',[ProductController::class,'getProducts'])->name('products.getProducts');
-
+        
         
         Route::get('/product-subcategories',[ProductSubCategorycontroller::class,'index'])->name('product-subcategories.index');
         
-
+        
         Route::post('/product-images/update',[ProductImageController::class,'update'])->name('product-images.update');
         Route::delete('/product-images',[ProductImageController::class,'destroy'])->name('product-images.destroy');
+        
+        // Shipping Routes
+        Route::get('/shipping/create',[ShippingController::class,'create'])->name('shipping.create');
+        Route::post('/shipping',[ShippingController::class,'store'])->name('shipping.store');
+
 
         //temp-images.create
         Route::post('/upload-temp-image',[TempImagesController::class,'create'])->name('temp-images.create');
