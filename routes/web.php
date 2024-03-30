@@ -42,6 +42,7 @@ Route::post('/delete-item',[CartController::class,'deleteItem'])->name('front.de
 Route::get('/checkout',[CartController::class,'checkout'])->name('front.checkout');
 Route::post('/process-checkout',[CartController::class,'processCheckout'])->name('front.processCheckout');
 Route::get('/thanks/{orderId}',[CartController::class,'thankyou'])->name('front.thankyou');
+Route::post('/get-order-summery',[CartController::class,'getOrderSummery'])->name('front.getOrderSummery');
 
 
 Route::group(['prefix'=>'account'],function(){
@@ -120,6 +121,9 @@ Route::group(['prefix'=>'admin'],function(){
         // Shipping Routes
         Route::get('/shipping/create',[ShippingController::class,'create'])->name('shipping.create');
         Route::post('/shipping',[ShippingController::class,'store'])->name('shipping.store');
+        Route::get('/shipping/{id}',[ShippingController::class,'edit'])->name('shipping.edit');
+        Route::put('/shipping/{id}',[ShippingController::class,'update'])->name('shipping.update');
+        Route::delete('/shipping/{id}',[ShippingController::class,'destroy'])->name('shipping.delete');
 
 
         //temp-images.create
